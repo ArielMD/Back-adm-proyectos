@@ -5,7 +5,7 @@ const routes = require("./api/routes");
 app = express();
 
 conectionDB();
-
+app.use(express.json({ extended: true }));
 port = process.env.PORT || 4000;
 
 app.use(routes);
