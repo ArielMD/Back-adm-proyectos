@@ -2,9 +2,10 @@ const { User } = require("../models");
 const { validationResult } = require("express-validator");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { json } = require("express");
 
-class UserController {
-  async createUser(req, res) {
+class AuthController {
+  async login(req, res) {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -16,16 +17,15 @@ class UserController {
     try {
       let user = await User.findOne({ email });
 
-      if (user) {
-        return res.status(400).send({ message: "usuario ya existe" });
+      if (!user) {
+        return res.status(400).json({ msg: "El usuario no existe" });
       }
 
-      user = new User(req.body);
+      const passwordCorrect = await bcryptjs.compare(password, user.password);
 
-      const salt = await bcryptjs.genSalt(10);
-      user.password = await bcryptjs.hash(password, salt);
-
-      await user.save();
+      if (!passwordCorrect) {
+        return res.status(400).json({ msg: "Contraseña incorrecta" });
+      }
 
       const payload = {
         user: user.id,
@@ -40,11 +40,10 @@ class UserController {
           return res.status(200).send({ token });
         }
       );
-    } catch (error) {
-      console.log(error);
-      return res.status(400).send({ message: "hubo un error" });
-    }
+    } catch (error) {}
   }
+
+  async logout(req, res) {}
 }
 
-module.exports = new UserController();
+module.exports = new AuthController();
