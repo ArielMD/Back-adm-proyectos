@@ -2,6 +2,7 @@ const { Router } = require("express");
 const express = require("express");
 const userRoutes = require("./userRoutes");
 const authRoutes = require("./authRoutes");
+const projectRoutes = require("./projectRoutes");
 
 const router = Router();
 const apiRoute = Router();
@@ -12,6 +13,7 @@ apiRoute.use(express.json());
 //Routes
 apiRoute.use("/users", userRoutes);
 apiRoute.use("/auth", authRoutes);
+apiRoute.use("/project", projectRoutes);
 
 //Route Default
 router.use("/api", apiRoute);
