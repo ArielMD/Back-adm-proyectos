@@ -45,9 +45,49 @@ class ProjectController {
 
     try {
       //revisar el ID
+      let project = await Project.findById(req.params.id);
+
       //el proyecto existe
+      if (!project) {
+        return res.status(404).json({ msg: "projecto no encontrado" });
+      }
       //verificar el creador del projecto
+      console.log(project.created_by.toString(), req.user);
+      if (project.created_by.toString() !== req.user) {
+        return res.status(401).json({ msg: "No autorizado" });
+      }
       //actualizar
+      project = await Project.findByIdAndUpdate(
+        { _id: req.params.id },
+        { $set: newProject },
+        { new: true }
+      );
+
+      res.json({ project });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("error en el servidor");
+    }
+  }
+
+  async deleteProject(req, res) {
+    try {
+      //revisar el ID
+      let project = await Project.findById(req.params.id);
+
+      //el proyecto existe
+      if (!project) {
+        return res.status(404).json({ msg: "projecto no encontrado" });
+      }
+
+      //verificar el creador del projecto
+      console.log(project.created_by.toString(), req.user);
+      if (project.created_by.toString() !== req.user) {
+        return res.status(401).json({ msg: "No autorizado" });
+      }
+
+      await Project.findOneAndDelete({ _id: req.params.id });
+      res.json({ msg: "Proyecto Eliminado" });
     } catch (error) {
       console.log(error);
       res.status(500).send("error en el servidor");

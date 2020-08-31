@@ -3,6 +3,7 @@ const express = require("express");
 const userRoutes = require("./userRoutes");
 const authRoutes = require("./authRoutes");
 const projectRoutes = require("./projectRoutes");
+const taskRoutes = require("./taskRoutes");
 
 const router = Router();
 const apiRoute = Router();
