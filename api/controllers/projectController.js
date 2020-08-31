@@ -52,7 +52,6 @@ class ProjectController {
         return res.status(404).json({ msg: "projecto no encontrado" });
       }
       //verificar el creador del projecto
-      console.log(project.created_by.toString(), req.user);
       if (project.created_by.toString() !== req.user) {
         return res.status(401).json({ msg: "No autorizado" });
       }

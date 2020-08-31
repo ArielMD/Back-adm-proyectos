@@ -15,6 +15,7 @@ apiRoute.use(express.json());
 apiRoute.use("/users", userRoutes);
 apiRoute.use("/auth", authRoutes);
 apiRoute.use("/project", projectRoutes);
+apiRoute.use("/tasks", taskRoutes);
 
 //Route Default
 router.use("/api", apiRoute);
