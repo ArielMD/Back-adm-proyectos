@@ -39,10 +39,23 @@ class AuthController {
           return res.status(200).send({ token });
         }
       );
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ msg: "hubo un error en el servidor" });
+    }
   }
 
   async logout(req, res) {}
+
+  async authenticatedUser(req, res) {
+    try {
+      const user = await User.findById(req.user).select("-password");
+      res.json({ user });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ msg: "hubo un error en  el servidor" });
+    }
+  }
 }
 
 module.exports = new AuthController();
