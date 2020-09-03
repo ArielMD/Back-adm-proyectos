@@ -3,14 +3,8 @@ const { validationResult } = require("express-validator");
 
 class TaskController {
   async getTasks(req, res) {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ erros: errors.array() });
-    }
-
     try {
-      const { project } = req.body;
+      const project = req.params.id;
 
       const projectFound = await Project.findById(project);
 
@@ -75,8 +69,8 @@ class TaskController {
       }
 
       const newTask = {};
-      if (name) newTask.name = name;
-      if (state) newTask.state = state;
+      newTask.name = name;
+      newTask.state = state;
 
       task = await Task.findByIdAndUpdate(
         { _id: req.params.id },
@@ -93,7 +87,7 @@ class TaskController {
 
   async deleteTask(req, res) {
     try {
-      const { project } = req.body;
+      const project = req.params.project;
 
       let task = await Task.findById(req.params.id);
 

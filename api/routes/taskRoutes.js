@@ -5,12 +5,7 @@ const { check } = require("express-validator");
 
 const router = Router();
 
-router.get(
-  "/",
-  auth,
-  [check("project", "El proyecto es obligatorio").not().isEmpty()],
-  TaskController.getTasks
-);
+router.get("/:id", auth, TaskController.getTasks);
 
 router.post(
   "/",
@@ -24,6 +19,6 @@ router.post(
 
 router.put("/:id", auth, TaskController.updateTask);
 
-router.delete("/:id", auth, TaskController.deleteTask);
+router.delete("/:id/:project", auth, TaskController.deleteTask);
 
 module.exports = router;
